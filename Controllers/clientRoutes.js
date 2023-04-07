@@ -18,7 +18,7 @@ router.post('/', async (req, res, next) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         department: req.body.department,
-        telephoneNumber: parseInt(req.body.telephoneNumber),
+        telephoneNumber: req.body.telephoneNumber.length > 1 && parseInt(req.body.telephoneNumber),
         celularNumber: parseInt(req.body.celularNumber),
         address: {
             number: parseInt(req.body.number),

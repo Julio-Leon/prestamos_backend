@@ -1,12 +1,38 @@
 const express = require('express')
 const router = express.Router()
 const Prestamo = require('../Models/Prestamo.js')
-
+const Client = require('../Models/Client.js')
 
 router.get('/', async (req, res) => {
     try {
-        const clients = await Prestamo.find()
-        res.json(clients)
+        const prestamos = await Prestamo.find()
+        res.json(prestamos)
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.post('/', async (req, res, next) => {
+    const newPrestamoTemp = {
+        paymentSchedule: req.body.paymentSchedule,
+        prestamoAmount: Number(req.body.prestamoAmount),
+        totalToPay: Number(req.body.totalToPay),
+        interestEarn: Number(req.body.interestEarn),
+        amountOfPayments: Number(req.body.amountOfPayments),
+        amountPerPayment: Number(req.body.amountPerPayment),
+        startDate: req.body.startDate,
+        endDate: req.body.endDate
+    }
+
+    const client = Client.findOne({cedula: req.body.cedula})
+    console.log(client)
+    // if (Client.findOne({cedula: req.body.cedula})) {
+
+    // }
+
+    try {
+        // const newPrestamo = await Prestamo.create(newPrestamoTemp)
+        // res.json(newPrestamo)
     } catch (error) {
         next(error)
     }
