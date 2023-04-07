@@ -17,3 +17,7 @@ const Prestamo = new Schema({
 const prestamoModel = mongoose.model('Prestamo', Prestamo)
 
 module.exports = prestamoModel
+
+// 00000001
+// Monthly
+// 500
