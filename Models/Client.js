@@ -3,7 +3,7 @@ const mongoose = require('../DB/connection.js')
 const Schema = mongoose.Schema
 
 const Client = new Schema({
-    cedula: {type: String, required: true},
+    cedula: {type: String, required: true, unique: true},
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     department: {type: String, required: true},

@@ -39,5 +39,13 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+router.get('/:cedula', async (req, res, next) => {
+    try {
+        res.json(await Client.findOne({ cedula: req.params.cedula }))
+    } catch (error) {
+        next(error)
+    }
+})
+
 module.exports = router
 
