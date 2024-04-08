@@ -24,15 +24,11 @@ router.post('/', async (req, res, next) => {
         endDate: req.body.endDate
     }
 
-    const client = Client.findOne({cedula: req.body.cedula})
-    console.log(client)
-    // if (Client.findOne({cedula: req.body.cedula})) {
-
-    // }
+    
 
     try {
-        // const newPrestamo = await Prestamo.create(newPrestamoTemp)
-        // res.json(newPrestamo)
+        const newPrestamo = await Prestamo.create(newPrestamoTemp)
+        res.json(newPrestamo)
     } catch (error) {
         next(error)
     }

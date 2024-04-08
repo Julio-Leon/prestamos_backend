@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         const clients = await Client.find()
         res.json(clients)
     } catch (error) {
-        next(error)
+        console.log(error)
     }
 })
 
