@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestamos API - Backend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .endpoint {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+            border-radius: 4px;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #28a745;
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prestamos API Backend</h1>
+        <p>Backend API deployed on Netlify Functions</p>
+        <span class="status">✅ ACTIVE</span>
+        
+        <h2>API Endpoints</h2>
+        
+        <h3>System</h3>
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/.netlify/functions/health</code> - API health check
+        </div>
+
+        <h3>Clients</h3>
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/.netlify/functions/clients</code> - Get all clients
+        </div>
+        <div class="endpoint">
+            <span class="method">POST</span> <code>/.netlify/functions/clients</code> - Create new client
+        </div>
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/.netlify/functions/clients/{cedula}</code> - Get client by cédula
+        </div>
+        <div class="endpoint">
+            <span class="method">PUT</span> <code>/.netlify/functions/clients/{cedula}</code> - Update client
+        </div>
+        <div class="endpoint">
+            <span class="method">DELETE</span> <code>/.netlify/functions/clients/{cedula}</code> - Delete client
+        </div>
+        
+        <h3>Préstamos</h3>
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/.netlify/functions/prestamos</code> - Get all prestamos
+        </div>
+        <div class="endpoint">
+            <span class="method">POST</span> <code>/.netlify/functions/prestamos</code> - Create new prestamo
+        </div>
+        <div class="endpoint">
+            <span class="method">GET</span> <code>/.netlify/functions/prestamos/{id}</code> - Get prestamo by ID
+        </div>
+        <div class="endpoint">
+            <span class="method">PUT</span> <code>/.netlify/functions/prestamos/{id}</code> - Update prestamo
+        </div>
+        <div class="endpoint">
+            <span class="method">DELETE</span> <code>/.netlify/functions/prestamos/{id}</code> - Delete prestamo
+        </div>
+
+        <h2>Environment Variables Required</h2>
+        <ul>
+            <li><code>MONGO_STRING</code> or <code>MONGODB_URI</code> - MongoDB connection string</li>
+        </ul>
+
+        <h2>Usage</h2>
+        <p>This API uses MongoDB as the database and is deployed as serverless functions on Netlify.</p>
+        <p>All endpoints support CORS and can be accessed from your frontend application.</p>
+    </div>
+
+    <script>
+        // Simple API status check
+        fetch('/.netlify/functions/clients')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ API is working correctly');
+                } else {
+                    console.log('⚠️ API responded with status:', response.status);
+                }
+            })
+            .catch(error => {
+                console.log('❌ API connection error:', error);
+            });
+    </script>
+</body>
+</html>
