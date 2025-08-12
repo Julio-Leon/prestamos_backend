@@ -3,10 +3,12 @@ services:
     name: prestamos-backend
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: chmod +x build.sh && ./build.sh
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
-        value: 18.17.0
+        value: 18
       - key: NPM_VERSION  
-        value: 8.19.2
+        value: 8
+      - key: NODE_ENV
+        value: production
