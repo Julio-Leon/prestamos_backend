@@ -8,9 +8,52 @@ const prestamosController = require('./Controllers/prestamosRoutes.js')
 const app = express()
 app.use(express.json())
 
-app.use(cors())
+// Enhanced CORS configuration for local development
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://prestamosleon.netlify.app'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
+// Additional headers for better compatibility
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    })
+})
+
 app.use('/clients', clientController)
 app.use('/prestamos', prestamosController)
+
+// Debug route to log all unmatched requests
+app.use('*', (req, res, next) => {
+    console.log(`Unmatched route: ${req.method} ${req.originalUrl}`);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    res.status(404).json({ 
+        message: 'Route not found',
+        method: req.method,
+        url: req.originalUrl,
+        timestamp: new Date().toISOString()
+    });
+});
 
 // Error handling middleware
 app.use((error, req, res, next) => {
