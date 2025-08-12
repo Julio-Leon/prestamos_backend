@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: prestamos-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: NPM_VERSION  
+        value: 8.19.2

@@ -8,9 +8,15 @@ const prestamosController = require('./Controllers/prestamosRoutes.js')
 const app = express()
 app.use(express.json())
 
-// Enhanced CORS configuration for local development
+// Enhanced CORS configuration for both local development and production
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', 'https://prestamosleon.netlify.app'],
+    origin: [
+        'http://localhost:3000', 
+        'http://127.0.0.1:3000', 
+        'https://prestamosleon.netlify.app',
+        // Add your Render frontend URL here when you deploy
+        /https:\/\/.*\.onrender\.com$/
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -29,6 +35,16 @@ app.use((req, res, next) => {
         next();
     }
 });
+
+// Root endpoint for deployment health checks
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Prestamos Backend API',
+        status: 'running',
+        version: '1.0.0',
+        timestamp: new Date().toISOString() 
+    })
+})
 
 // Health check endpoint
 app.get('/health', (req, res) => {
