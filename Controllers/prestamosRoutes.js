@@ -21,8 +21,12 @@ router.post('/', async (req, res, next) => {
         endDate: req.body.endDate,
         totalToPay: Number(req.body.totalToPay),
         interestEarn: Number(req.body.interestEarn),
+        interestToPay: Number(req.body.interestToPay || req.body.interestEarn),
+        capitalRemaining: Number(req.body.capitalRemaining || req.body.prestamoAmount),
         amountOfPayments: Number(req.body.amountOfPayments),
-        amountPerPayment: Number(req.body.amountPerPayment)
+        amountPerPayment: Number(req.body.amountPerPayment),
+        paymentsMade: Number(req.body.paymentsMade || 0),
+        status: req.body.status || 'active'
     }
 
     try {
@@ -43,8 +47,12 @@ router.put('/:id', async (req, res, next) => {
             endDate: req.body.endDate,
             totalToPay: Number(req.body.totalToPay),
             interestEarn: Number(req.body.interestEarn),
+            interestToPay: Number(req.body.interestToPay || req.body.interestEarn),
+            capitalRemaining: Number(req.body.capitalRemaining || req.body.prestamoAmount),
             amountOfPayments: Number(req.body.amountOfPayments),
-            amountPerPayment: Number(req.body.amountPerPayment)
+            amountPerPayment: Number(req.body.amountPerPayment),
+            paymentsMade: Number(req.body.paymentsMade || 0),
+            status: req.body.status || 'active'
         }
 
         const updatedPrestamo = await Prestamo.findByIdAndUpdate(
@@ -76,6 +84,49 @@ router.delete('/:id', async (req, res, next) => {
         next(error)
     }
 })
+
+// New route for processing payments
+router.post('/:id/payment', async (req, res, next) => {
+    try {
+        const { capitalPayment, interestPayment } = req.body;
+        
+        const prestamo = await Prestamo.findById(req.params.id);
+        if (!prestamo) {
+            return res.status(404).json({ message: 'Préstamo no encontrado' });
+        }
+
+        // Update the loan balances
+        const updatedData = {
+            capitalRemaining: Math.max(0, prestamo.capitalRemaining - Number(capitalPayment)),
+            interestToPay: Math.max(0, prestamo.interestToPay - Number(interestPayment)),
+            paymentsMade: prestamo.paymentsMade + 1,
+            lastPaymentDate: new Date()
+        };
+
+        // Check if loan is fully paid
+        if (updatedData.capitalRemaining === 0 && updatedData.interestToPay === 0) {
+            updatedData.status = 'completed';
+        }
+
+        const updatedPrestamo = await Prestamo.findByIdAndUpdate(
+            req.params.id,
+            updatedData,
+            { new: true, runValidators: true }
+        );
+
+        res.json({
+            message: 'Pago procesado exitosamente',
+            prestamo: updatedPrestamo,
+            paymentDetails: {
+                capitalPayment: Number(capitalPayment),
+                interestPayment: Number(interestPayment),
+                totalPayment: Number(capitalPayment) + Number(interestPayment)
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = router
 
