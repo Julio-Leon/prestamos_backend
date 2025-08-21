@@ -84,8 +84,12 @@ exports.handler = async (event, context) => {
             endDate: prestamoData.endDate,
             totalToPay: Number(prestamoData.totalToPay),
             interestEarn: Number(prestamoData.interestEarn),
+            interestToPay: Number(prestamoData.interestToPay || prestamoData.interestEarn),
+            capitalRemaining: Number(prestamoData.capitalRemaining || prestamoData.prestamoAmount),
             amountOfPayments: Number(prestamoData.amountOfPayments),
-            amountPerPayment: Number(prestamoData.amountPerPayment)
+            amountPerPayment: Number(prestamoData.amountPerPayment),
+            paymentsMade: Number(prestamoData.paymentsMade || 0),
+            status: prestamoData.status || 'active'
           };
 
           const newPrestamo = await Prestamo.create(newPrestamoTemp);
@@ -122,8 +126,12 @@ exports.handler = async (event, context) => {
             endDate: prestamoData.endDate,
             totalToPay: Number(prestamoData.totalToPay),
             interestEarn: Number(prestamoData.interestEarn),
+            interestToPay: Number(prestamoData.interestToPay || prestamoData.interestEarn),
+            capitalRemaining: Number(prestamoData.capitalRemaining || prestamoData.prestamoAmount),
             amountOfPayments: Number(prestamoData.amountOfPayments),
-            amountPerPayment: Number(prestamoData.amountPerPayment)
+            amountPerPayment: Number(prestamoData.amountPerPayment),
+            paymentsMade: Number(prestamoData.paymentsMade || 0),
+            status: prestamoData.status || 'active'
           };
 
           const updatedPrestamo = await Prestamo.findByIdAndUpdate(
